@@ -27,9 +27,9 @@ namespace SampleWebApi.Controllers
             return device;
         }
 
-        // GET /devices/query?Airport=1
-        // GET /devices/query?Airport=1&Terminal=2
-        // GET /devices/query?Airport=1&Terminal=2&Type=Unit
+        // GET /devices/query?Airport=SYD
+        // GET /devices/query?Airport=SYD&Terminal=2
+        // GET /devices/query?Airport=SYD&Terminal=2&Type=Unit
         // ... any combination
         [HttpGet("query")]
         public ActionResult<Device[]> Query([FromQuery]Location location)
