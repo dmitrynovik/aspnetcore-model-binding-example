@@ -27,11 +27,11 @@ namespace SampleWebApi.Controllers
             return device;
         }
 
-        // GET /devices/query?Airport=SYD
-        // GET /devices/query?Airport=SYD&Terminal=2
-        // GET /devices/query?Airport=SYD&Terminal=2&Type=Unit
+        // GET /devices?Airport=SYD
+        // GET /devices?Airport=SYD&Terminal=2
+        // GET /devices?Airport=SYD&Terminal=2&Type=Unit
         // ... any combination
-        [HttpGet("query")]
+        [HttpGet("")]
         public ActionResult<Device[]> Query([FromQuery]Location location)
         {
             const int maxItems = 100;
