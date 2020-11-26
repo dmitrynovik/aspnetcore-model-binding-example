@@ -17,12 +17,13 @@ namespace SampleWebApi.Controllers
         };
 
         // GET /devices/1
+        /// <returns>A single resource accessed by short, immutable path, or 404 if N/A. The path/to/resource should not change</returns>
         [HttpGet("{id}")]
         public ActionResult<Device> Get(string id)
         {
             var device = _devices.FirstOrDefault(d => d.Id == id);
             if (device == null)
-                return NotFound();
+                return NotFound(); // 404
 
             return device;
         }
@@ -31,9 +32,11 @@ namespace SampleWebApi.Controllers
         // GET /devices?Airport=SYD&Terminal=2
         // GET /devices?Airport=SYD&Terminal=2&Type=Unit
         // ... any combination
+        /// <returns>A collection of devices filtered by multiple attributes.</returns>
         [HttpGet("")]
         public ActionResult<Device[]> Query([FromQuery]Location location)
         {
+            // Limit maximum of items to prevent exploits:
             const int maxItems = 100;
 
             var q = _devices.AsQueryable();
