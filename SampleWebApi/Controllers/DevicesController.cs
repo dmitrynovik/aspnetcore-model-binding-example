@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using SampleWebApi.Models;
@@ -32,12 +33,15 @@ namespace SampleWebApi.Controllers
         // GET /devices?Airport=SYD&Terminal=2
         // GET /devices?Airport=SYD&Terminal=2&Type=Unit
         // ... any combination
+        // + supports pagination e.g. /devices?Airport=SYD?page=2&pageSize=10
         /// <returns>A collection of devices filtered by multiple attributes.</returns>
         [HttpGet("")]
-        public ActionResult<Device[]> Query([FromQuery]Location location)
+        public ActionResult<CollectionResponse<Device>> Query([FromQuery]DeviceRequest location)
         {
             // Limit maximum of items to prevent exploits:
             const int maxItems = 100;
+
+            var pageSize = Math.Min(maxItems, location.PageSize);
 
             var q = _devices.AsQueryable();
 
@@ -46,7 +50,9 @@ namespace SampleWebApi.Controllers
             if (!string.IsNullOrEmpty(location.Terminal)) q = q.Where(d => d.Terminal == location.Terminal);
             if (!string.IsNullOrEmpty(location.Type)) q = q.Where(d => d.Type == location.Type);
 
-            return q.Take(maxItems).ToArray();
+            return new CollectionResponse<Device>(location.Page, 
+                q.Count(), 
+                _devices.Skip((location.Page - 1) * pageSize).Take(pageSize));
         }
     }
 }
