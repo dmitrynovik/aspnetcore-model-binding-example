@@ -10,12 +10,21 @@ namespace SampleWebApi.Controllers
     [ApiController]
     public class DevicesController : ControllerBase
     {
-        private readonly ICollection<Device> _devices = new List<Device>
+        private readonly ICollection<Device> _devices;
+
+        public DevicesController()
         {
-            new Device { Airport = "SYD", Id = "1", Terminal = "1", Type = "Unit" },
-            new Device { Airport = "SYD", Id = "2", Terminal = "1", Type = "Unit" },
-            new Device { Airport = "SYD", Id = "3", Terminal = "2", Type = "Unit" },
-        };
+            // Generate some dummy data:
+            _devices = Enumerable.Range(1, 100)
+                .Select(i => new Device
+                {
+                    Airport = i < 60 ? "SYD" : "LHR",
+                    Id = i.ToString(),
+                    Terminal = (i % 60 / 20 + 1).ToString(), // 1, 2, 3 ...
+                    Type = "Unit"
+                })
+                .ToArray();
+        }
 
         // GET /devices/1
         /// <returns>A single resource accessed by short, immutable path, or 404 if N/A. The path/to/resource should not change</returns>
@@ -36,7 +45,7 @@ namespace SampleWebApi.Controllers
         // + supports pagination e.g. /devices?Airport=SYD?page=2&pageSize=10
         /// <returns>A collection of devices filtered by multiple attributes.</returns>
         [HttpGet("")]
-        public ActionResult<CollectionResponse<Device>> Query([FromQuery]DeviceRequest location)
+        public ActionResult<CollectionResponse<Device>> Query([FromQuery] DeviceRequest location)
         {
             // Limit maximum of items to prevent exploits:
             const int maxItems = 100;
@@ -52,7 +61,7 @@ namespace SampleWebApi.Controllers
 
             return new CollectionResponse<Device>(location.Page, 
                 q.Count(), 
-                _devices.Skip((location.Page - 1) * pageSize).Take(pageSize));
+                q.Skip((location.Page - 1) * pageSize).Take(pageSize));
         }
     }
 }
