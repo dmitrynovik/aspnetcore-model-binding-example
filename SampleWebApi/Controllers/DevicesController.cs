@@ -7,7 +7,7 @@ namespace SampleWebApi.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class DeviceController : ControllerBase
+    public class DevicesController : ControllerBase
     {
         private readonly ICollection<Device> _devices = new List<Device>
         {
@@ -16,7 +16,7 @@ namespace SampleWebApi.Controllers
             new Device { Airport = "SYD", Id = "3", Terminal = "2", Type = "Unit" },
         };
 
-        // GET /device/1
+        // GET /devices/1
         [HttpGet("{id}")]
         public ActionResult<Device> Get(string id)
         {
@@ -27,9 +27,9 @@ namespace SampleWebApi.Controllers
             return device;
         }
 
-        // GET /device/query?Airport=1
-        // GET /device/query?Airport=1&Terminal=2
-        // GET /device/query?Airport=1&Terminal=2&Type=Unit
+        // GET /devices/query?Airport=1
+        // GET /devices/query?Airport=1&Terminal=2
+        // GET /devices/query?Airport=1&Terminal=2&Type=Unit
         // ... any combination
         [HttpGet("query")]
         public ActionResult<Device[]> Query([FromQuery]Location location)

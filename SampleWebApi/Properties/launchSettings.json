@@ -12,7 +12,7 @@
     "SampleWebApi": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "weatherforecast",
+      "launchUrl": "devices/query?Type=Unit",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
