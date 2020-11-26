@@ -11,7 +11,9 @@ E.g. GET /devices/1
 
 ### A collection of resources:
 GET /devices?Airport=SYD
+
 GET /devices?Airport=SYD&Terminal=2
+
 GET /devices?Airport=SYD&Terminal=2&Type=Unit
 
 ... any combination of above
