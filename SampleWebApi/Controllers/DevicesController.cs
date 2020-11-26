@@ -45,23 +45,23 @@ namespace SampleWebApi.Controllers
         // + supports pagination e.g. /devices?Airport=SYD?page=2&pageSize=10
         /// <returns>A collection of devices filtered by multiple attributes.</returns>
         [HttpGet("")]
-        public ActionResult<CollectionResponse<Device>> Query([FromQuery] DeviceRequest location)
+        public ActionResult<CollectionResponse<Device>> Query([FromQuery] DeviceRequest request)
         {
             // Limit maximum of items to prevent exploits:
             const int maxItems = 100;
 
-            var pageSize = Math.Min(maxItems, location.PageSize);
+            var pageSize = Math.Min(maxItems, request.PageSize);
 
             var q = _devices.AsQueryable();
 
-            if (!string.IsNullOrEmpty(location.Id)) q = q.Where(d => d.Id == location.Id);
-            if (!string.IsNullOrEmpty(location.Airport)) q = q.Where(d => d.Airport == location.Airport);
-            if (!string.IsNullOrEmpty(location.Terminal)) q = q.Where(d => d.Terminal == location.Terminal);
-            if (!string.IsNullOrEmpty(location.Type)) q = q.Where(d => d.Type == location.Type);
+            if (!string.IsNullOrEmpty(request.Id)) q = q.Where(d => d.Id == request.Id);
+            if (!string.IsNullOrEmpty(request.Airport)) q = q.Where(d => d.Airport == request.Airport);
+            if (!string.IsNullOrEmpty(request.Terminal)) q = q.Where(d => d.Terminal == request.Terminal);
+            if (!string.IsNullOrEmpty(request.Type)) q = q.Where(d => d.Type == request.Type);
 
-            return new CollectionResponse<Device>(location.Page, 
+            return new CollectionResponse<Device>(request.Page, 
                 q.Count(), 
-                q.Skip((location.Page - 1) * pageSize).Take(pageSize));
+                q.Skip((request.Page - 1) * pageSize).Take(pageSize));
         }
     }
 }
