@@ -13,6 +13,7 @@ E.g. GET /devices/1
 GET /devices?Airport=SYD
 GET /devices?Airport=SYD&Terminal=2
 GET /devices?Airport=SYD&Terminal=2&Type=Unit
+
 ... any combination of above
 + supports pagination e.g. /devices?Airport=SYD?page=2&pageSize=10
 
