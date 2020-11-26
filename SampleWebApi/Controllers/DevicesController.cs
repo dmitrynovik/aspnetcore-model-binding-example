@@ -49,8 +49,7 @@ namespace SampleWebApi.Controllers
         {
             // Limit maximum of items to prevent exploits:
             const int maxItems = 100;
-
-            var pageSize = Math.Min(maxItems, request.PageSize);
+            request.PageSize = Math.Min(maxItems, request.PageSize);
 
             var q = _devices.AsQueryable();
 
@@ -59,9 +58,7 @@ namespace SampleWebApi.Controllers
             if (!string.IsNullOrEmpty(request.Terminal)) q = q.Where(d => d.Terminal == request.Terminal);
             if (!string.IsNullOrEmpty(request.Type)) q = q.Where(d => d.Type == request.Type);
 
-            return new CollectionResponse<Device>(request.Page, 
-                q.Count(), 
-                q.Skip((request.Page - 1) * pageSize).Take(pageSize));
+            return new CollectionResponse<Device>(request, q);
         }
     }
 }

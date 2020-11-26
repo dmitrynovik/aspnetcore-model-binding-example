@@ -6,13 +6,20 @@ namespace SampleWebApi.Models
 {
     public class CollectionResponse<T>
     {
-        public CollectionResponse() : this(1, 0, Array.Empty<T>()) {  }
-
-        public CollectionResponse(int page, int total, IEnumerable<T> items)
+        public CollectionResponse()
         {
-            Page  = page;
-            Total = total;
-            Items = items.ToArray();
+            Items = Array.Empty<T>();
+            Page = 1;
+            Total = 0;
+        }
+
+        public CollectionResponse(CollectionRequest request, IQueryable<T> q)
+        {
+            Page = request.Page;
+            Total = q.Count();
+            Items = q.Skip((request.Page - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .ToArray();
         }
 
         public int Page { get; set; }
