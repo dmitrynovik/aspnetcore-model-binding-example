@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace SampleWebApi
 {
@@ -42,6 +43,8 @@ namespace SampleWebApi
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+
+                //endpoints.MapControllerRoute("search", "devices/search*", new {controller = "devices", action = "Search"});
             });
         }
     }

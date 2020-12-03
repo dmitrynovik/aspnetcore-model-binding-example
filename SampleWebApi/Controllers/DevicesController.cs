@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
+using SampleWebApi.ModelBinders;
 using SampleWebApi.Models;
 
 namespace SampleWebApi.Controllers
@@ -47,6 +48,18 @@ namespace SampleWebApi.Controllers
         [HttpGet("")]
         public ActionResult<CollectionResponse<Device>> Query([FromQuery] DeviceRequest request)
         {
+            return QueryImpl(request);
+        }
+
+        [Route(@"search/{p1?}/{p2?}/{p3?}/{p4?}/{p5?}/{p6?}")]
+        //[Route(@"{url:regex(search)}")]
+        public ActionResult<CollectionResponse<Device>> Search([ModelBinder(typeof(PathModelBinder<DeviceRequest>))] DeviceRequest request)
+        {
+            return QueryImpl(request ?? new DeviceRequest());
+        }
+
+        private ActionResult<CollectionResponse<Device>> QueryImpl(DeviceRequest request)
+        {
             // Limit maximum of items to prevent exploits:
             const int maxItems = 100;
             request.PageSize = Math.Min(maxItems, request.PageSize);
@@ -60,5 +73,6 @@ namespace SampleWebApi.Controllers
 
             return new CollectionResponse<Device>(request, q);
         }
+
     }
 }
