@@ -55,7 +55,8 @@ namespace SampleWebApi.Controllers
         //[Route(@"{url:regex(search)}")]
         public ActionResult<CollectionResponse<Device>> Search([ModelBinder(typeof(PathModelBinder<DeviceRequest>))] DeviceRequest request)
         {
-            return QueryImpl(request ?? new DeviceRequest());
+            if (request == null) throw new ArgumentNullException(nameof(request));
+            return QueryImpl(request);
         }
 
         private ActionResult<CollectionResponse<Device>> QueryImpl(DeviceRequest request)

@@ -65,7 +65,7 @@ namespace SampleWebApi.ModelBinders
                 i++;
             }
 
-            bindingContext.Model = model;
+            bindingContext.Result = ModelBindingResult.Success(model);
             watch.Stop();
             Console.WriteLine("PathModelBinder, elapsed = {0}", watch.Elapsed);
             return Task.CompletedTask;
