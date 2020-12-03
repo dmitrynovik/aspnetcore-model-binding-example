@@ -16,7 +16,12 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "http://localhost:5001"
+      "applicationUrl": "http://localhost:5001",
+      "Logging": {
+        "LogLevel": {
+          "Default": "Debug"
+        }
+      }
     }
   }
 }

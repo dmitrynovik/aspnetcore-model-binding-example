@@ -51,8 +51,7 @@ namespace SampleWebApi.Controllers
             return QueryImpl(request);
         }
 
-        [Route(@"search/{p1?}/{p2?}/{p3?}/{p4?}/{p5?}/{p6?}")]
-        //[Route(@"{url:regex(search)}")]
+        [Route("search/{*args}")]
         public ActionResult<CollectionResponse<Device>> Search([ModelBinder(typeof(PathModelBinder<DeviceRequest>))] DeviceRequest request)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
