@@ -12,12 +12,18 @@ namespace SampleWebApi.ModelBinders
 {
     public class PathModelBinder<T> : IModelBinder where T: new()
     {
+        private readonly int _skipPathSegments;
         private static readonly char[] Slash = new char[] { '/' };
         private IDictionary<string, PropertyInfo> _props;
 
+        public PathModelBinder(int skipPathSegments = 2)
+        {
+            _skipPathSegments = skipPathSegments;
+        }
+
         public Task BindModelAsync(ModelBindingContext bindingContext)
         {
-            var modelName = bindingContext.ModelName;
+            var watch = Stopwatch.StartNew();
             var model = new T();
             var i = 0;
             string propName = "";
@@ -30,7 +36,7 @@ namespace SampleWebApi.ModelBinders
 
             var pathTokens = bindingContext.ActionContext.HttpContext.Request.Path.Value
                 .Split(Slash, StringSplitOptions.RemoveEmptyEntries)
-                .Skip(2);
+                .Skip(_skipPathSegments);
 
             foreach (var pathToken in pathTokens)
             {
@@ -60,6 +66,8 @@ namespace SampleWebApi.ModelBinders
             }
 
             bindingContext.Model = model;
+            watch.Stop();
+            Console.WriteLine("PathModelBinder, elapsed = {0}", watch.Elapsed);
             return Task.CompletedTask;
         }
     }
