@@ -2,6 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <RepositoryUrl>https://github.com/dmitrynovik/aspnetcore-url-path-model-binder</RepositoryUrl>
+    <RepositoryType>Github</RepositoryType>
+    <PackageTags>aspnetcore url path model binder</PackageTags>
+    <PackageProjectUrl>https://github.com/dmitrynovik/aspnetcore-url-path-model-binder</PackageProjectUrl>
+    <Authors>Dmitry Novik</Authors>
+    <PackageLicenseExpression>Apache</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
