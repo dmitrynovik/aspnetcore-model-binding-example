@@ -6,19 +6,22 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.Extensions.Logging;
 
-namespace SampleWebApi.ModelBinders
+namespace UrlPathModelBinder
 {
     public class PathModelBinder<T> : IModelBinder where T: new()
     {
-        private readonly int _skipPathSegments;
+        private readonly ILogger<PathModelBinder<T>> _logger;
         private static readonly char[] Slash = new char[] { '/' };
         private IDictionary<string, PropertyInfo> _props;
 
-        public PathModelBinder(int skipPathSegments = 2)
+        public PathModelBinder(ILogger<PathModelBinder<T>> logger)
         {
-            _skipPathSegments = skipPathSegments;
+            _logger = logger;
         }
+
+        public uint SkipPathSegments { get; set; } = 2; // (default): skip [controller]/[action]
 
         public Task BindModelAsync(ModelBindingContext bindingContext)
         {
@@ -26,8 +29,17 @@ namespace SampleWebApi.ModelBinders
             var model = new T();
             var i = 0;
             string propName = "";
-
             const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.SetProperty;
+            uint skipSegments;
+
+            if (model is IUrlPathModel urlPathModel)
+            {
+                skipSegments = urlPathModel.SkipPathSegments;
+            }
+            else
+            {
+                skipSegments = SkipPathSegments;
+            }
 
             _props = typeof(T).GetProperties(flags).ToDictionary(
                 p => CultureInfo.InvariantCulture.TextInfo.ToTitleCase(p.Name),
@@ -35,12 +47,14 @@ namespace SampleWebApi.ModelBinders
 
             var pathTokens = bindingContext.ActionContext.HttpContext.Request.Path.Value
                 .Split(Slash, StringSplitOptions.RemoveEmptyEntries)
-                .Skip(_skipPathSegments);
+                .Skip((int)skipSegments);
 
             foreach (var pathToken in pathTokens)
             {
                 if (i % 2 == 0)
+                {
                     propName = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(pathToken);
+                }
                 else
                 {
                     try
@@ -52,12 +66,12 @@ namespace SampleWebApi.ModelBinders
                         }
                         else
                         {
-                            Trace.TraceError("Cannot find property: {0}", propName);
+                            _logger.LogError("Cannot find property: {0}", propName);
                         }
                     }
                     catch (Exception e)
                     {
-                        Trace.TraceError(e.ToString());
+                        _logger.LogError(e.ToString());
                     }
                 }
 
@@ -66,7 +80,7 @@ namespace SampleWebApi.ModelBinders
 
             bindingContext.Result = ModelBindingResult.Success(model);
             watch.Stop();
-            Console.WriteLine("PathModelBinder, elapsed = {0}", watch.Elapsed);
+            _logger.LogTrace("PathModelBinder, elapsed = {0}", watch.Elapsed);
             return Task.CompletedTask;
         }
     }

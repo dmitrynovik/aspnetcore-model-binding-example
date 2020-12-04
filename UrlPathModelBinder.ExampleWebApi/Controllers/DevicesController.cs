@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
-using SampleWebApi.ModelBinders;
 using SampleWebApi.Models;
+using UrlPathModelBinder;
 
 namespace SampleWebApi.Controllers
 {
