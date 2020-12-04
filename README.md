@@ -1,22 +1,17 @@
-# ASP.NET Core Model Binding Demo
+# ASP.NET Core Url Path Model Binder
 
-## HOWTO Run
+## Purpose
+To bind custom types from URI path
+
+## Example
+Imagine you have a custom model with properties `Id` and `Name` and you want to bind it to the request `GET [controller]/[action]/Name/John/Id/66`
+
+## HOWTO Run ASP.NET Web example project
 1. Clone, compile and run the code
-2. Navigate to http://localhost:5001/devices
+2. Navigate to http://localhost:5001/
+3. Try the following URLs:
+http://localhost:5001/Aiport/SYD
+http://localhost:5001/Aiport/SYD/Terminal/1
 
-## HTTP requests example
-
-### Single resource by ID:
-E.g. GET /devices/1
-
-### A collection of resources:
-GET /devices?Airport=SYD
-
-GET /devices?Airport=SYD&Terminal=2
-
-GET /devices?Airport=SYD&Terminal=2&Type=Unit
-
-... any combination of above
-+ supports pagination e.g. /devices?Airport=SYD?page=2&pageSize=10
 
 
