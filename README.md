@@ -24,7 +24,7 @@ NOTES:
 ## Usage
 1. Install this package
 
-2. In your ASP.NET controller, change your `action name,  TRequest, TResponse` to whatever is needed:
+2. In your ASP.NET controller, change `your action name,  TRequest, TResponse` to whatever is needed:
 ```
 
 [Route("your action name/{*argv}")]
