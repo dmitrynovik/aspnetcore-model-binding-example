@@ -1,10 +1,29 @@
 # ASP.NET Core Url Path Model Binder
 
 ## Purpose
-To bind custom types from URI path
+To bind custom types to the path part of request URL
 
 ## Example
-Imagine you have a custom model with properties `Id` and `Name` and you want to bind it to the request `GET [controller]/[action]/Name/John/Id/66`
+Imagine you have a custom model type with properties `Id` and `Name`:
+
+```
+public class Person
+{
+	public int Id { get; set;}
+	public string Name { get; set;}
+}
+
+```
+and you want to bind it to the request `GET [controller]/[action]/Name/John/Id/66`
+
+## Supported property types
+* System.String
+* System.Int16
+* System.UInt32
+* System.Int32
+* System.UInt32
+* System.Int64
+* System.UInt64
 
 ## HOWTO Run ASP.NET Web example project
 1. Clone, compile and run the code
