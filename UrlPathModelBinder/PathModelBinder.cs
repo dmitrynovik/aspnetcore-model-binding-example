@@ -45,7 +45,7 @@ namespace UrlPathModelBinder
                 p => CultureInfo.InvariantCulture.TextInfo.ToTitleCase(p.Name),
                 p => p);
 
-            var pathTokens = bindingContext.ActionContext.HttpContext.Request.Path.Value
+            var pathTokens = GetPath(bindingContext)
                 .Split(Slash, StringSplitOptions.RemoveEmptyEntries)
                 .Skip((int)skipSegments);
 
@@ -62,26 +62,31 @@ namespace UrlPathModelBinder
                         _props.TryGetValue(propName, out var propertyInfo);
                         if (propertyInfo != null)
                         {
-                            propertyInfo.SetValue(model, pathToken);
+                            propertyInfo.SetValue(model,   Convert.ChangeType(pathToken, propertyInfo.PropertyType));
                         }
                         else
                         {
-                            _logger.LogError("Cannot find property: {0}", propName);
+                            _logger?.LogError("Cannot find property: {0}", propName);
                         }
                     }
                     catch (Exception e)
                     {
-                        _logger.LogError(e.ToString());
+                        _logger?.LogError(e.ToString());
                     }
                 }
 
                 i++;
             }
 
+            Model = model;
             bindingContext.Result = ModelBindingResult.Success(model);
             watch.Stop();
-            _logger.LogTrace("PathModelBinder, elapsed = {0}", watch.Elapsed);
+            _logger?.LogTrace("PathModelBinder, elapsed = {0}", watch.Elapsed);
             return Task.CompletedTask;
         }
+
+        public T Model { get; private set; }
+
+        public virtual string GetPath(ModelBindingContext bindingContext) => bindingContext.ActionContext.HttpContext.Request.Path.Value;
     }
 }
