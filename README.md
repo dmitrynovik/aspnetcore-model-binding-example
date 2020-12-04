@@ -19,7 +19,7 @@ and you want to bind it to the request `GET [controller]/[action]/Name/John/Id/6
 ## Usage
 ```
 [Route("<your action name>/{*argv}")]
-public ActionResult<your response type>> Search([ModelBinder(typeof(PathModelBinder<<your request model type>>))] DeviceRequest request)
+public ActionResult<your response type>> Search([ModelBinder(typeof(PathModelBinder<your request model type>))] DeviceRequest request)
 ```
 
 ## Supported property types
