@@ -14,29 +14,29 @@ public class Person
 }
 
 ```
-and you want to bind it to the request `GET [controller]/[action]/Name/John/Id/66`
+and you want to bind it to the request `GET [controller]/[action]/name/John/id/66`
+
+NOTES:
+- The binder will skip first 2 path segments which are usually the `[controller]/[action]`
+- For every model property, the Url Path is assumed to contain  `... propertyName/propertyValue` adjacent segments e.g. `name/John`
+- The property name after extraction from the Url is converted to Pascal case: `name` => `Name`
 
 ## Usage
+1. Install this package
+
+2. In your ASP.NET controller, change your `action name,  TRequest, TResponse` to whatever is needed:
 ```
-[Route("<your action name>/{*argv}")]
-public ActionResult<your response type>> Search([ModelBinder(typeof(PathModelBinder<your request model type>))] DeviceRequest request)
+
+[Route("your action name/{*argv}")]
+public ActionResult<TResponse> Search([ModelBinder(typeof(PathModelBinder<TRequest>))] TRequest request)
 ```
 
 ## Supported property types
-* System.String
-* System.Int16
-* System.UInt32
-* System.Int32
-* System.UInt32
-* System.Int64
-* System.UInt64
-
-## HOWTO Run ASP.NET Web example project
-1. Clone, compile and run the code
-2. Navigate to http://localhost:5001/
-3. Try the following URLs:
-http://localhost:5001/Aiport/SYD
-http://localhost:5001/Aiport/SYD/Terminal/1
-
-
+- System.String
+- System.Int16
+- System.UInt32
+- System.Int32
+- System.UInt32
+- System.Int64
+- System.UInt64
 

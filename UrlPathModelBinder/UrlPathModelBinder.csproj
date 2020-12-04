@@ -8,7 +8,7 @@
     <PackageTags>aspnetcore url path model binder</PackageTags>
     <PackageProjectUrl>https://github.com/dmitrynovik/aspnetcore-url-path-model-binder</PackageProjectUrl>
     <Authors>Dmitry Novik</Authors>
-    <PackageLicenseExpression>Apache</PackageLicenseExpression>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
